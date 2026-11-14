@@ -12,7 +12,7 @@ p = record(baseline = 2.0, emax = 3.0, ec50 = 1.0, hill = 1.5)
 response = pd.sigmoid_emax([0.0, 0.25, 1.0, 4.0], p)
 ```
 
-The [concentration-response example](examples/playground.flatppl) infers a
+The [live concentration-response example](https://live.flatppl.org/#model=https%3A%2F%2Fraw.githubusercontent.com%2Fflatppl-community%2Fflatppl-pharma-pd%2Fmain%2Fexamples%2Fplayground.flatppl&target=Pi_post) infers a
 maximum increment and half-effect concentration with proper priors. The
 [effect-site example](examples/effect-site.flatppl) connects oral
 [pharmacokinetics](https://github.com/flatppl-community/flatppl-pharma-pk) to a
