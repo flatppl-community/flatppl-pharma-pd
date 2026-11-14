@@ -6,7 +6,7 @@ are mg, L and hours; response units are arbitrary. Refine the grid to assess
 integration accuracy. The initial effect-site concentration is explicitly zero.
 %%%
 flatppl_compat = "0.1"
-pd = load_module("../main.flatppl")
+pd = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-pharma-pd/477a23c1a3fb6ca837534670953fef92b9bc0d0d/main.flatppl")
 pk = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-pharma-pk/d92741153dabadf302237ed4d115ca1ba6520ea4/main.flatppl")
 ode = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-numerics-ode/728507a8b8f62914a5c184ff7d3d47560b3f902a/main.flatppl")
 concentration(t, p) = pk.one_compartment_oral(t, p.dose, p)

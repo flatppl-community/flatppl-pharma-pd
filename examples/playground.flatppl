@@ -6,7 +6,7 @@ synthetic measurements. Baseline and measurement noise are known. Proper priors
 keep the experiment explicit; the library supplies only the response curve.
 %%%
 flatppl_compat = "0.1"
-pd = load_module("../main.flatppl")
+pd = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-pharma-pd/477a23c1a3fb6ca837534670953fef92b9bc0d0d/main.flatppl")
 concentration_data = [0.0, 0.25, 0.5, 1.0, 2.0, 4.0]
 y_data = [2.03, 2.36, 2.71, 3.01, 3.36, 3.58]
 emax ~ LogNormal(log(2.0), 0.4)
