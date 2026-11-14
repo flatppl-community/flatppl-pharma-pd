@@ -196,3 +196,24 @@ mechanisms follow the original equations (1)–(8), (11)–(13) of
 The fractional direct-inhibition convention here is $E_{\max}=E_0 I_{\max}$ in
 their decrement form. Partial inhibition, rate-stimulation capacity and Hill
 exponents are explicit generalizations of their basic turnover models.
+
+## Examples and validation
+
+The [live concentration-response example](https://live.flatppl.org/#model=https%3A%2F%2Fraw.githubusercontent.com%2Fflatppl-community%2Fflatppl-pharma-pd%2Fmain%2Fexamples%2Fplayground.flatppl&target=Pi_post) infers a
+maximum increment and half-effect concentration with proper priors. The
+[effect-site example](../examples/effect-site.flatppl) connects oral
+[pharmacokinetics](https://github.com/flatppl-community/flatppl-pharma-pk) to a
+delayed response using
+[flatppl-numerics-ode](https://github.com/flatppl-community/flatppl-numerics-ode).
+
+The library includes Emax and Hill curves, fractional inhibitory responses,
+an effect compartment, and four production/loss turnover models. Parameters,
+concentration callbacks, initial conditions, priors and solver grids are explicit.
+
+Run mathematical checks with Node 24 or newer and local JS, ODE and PK checkouts:
+
+```sh
+FLATPPL_JS_DIR=/path/to/flatppl-js \
+FLATPPL_ODE_DIR=/path/to/flatppl-numerics-ode \
+FLATPPL_PK_DIR=/path/to/flatppl-pharma-pk node tests/check.cjs
+```
