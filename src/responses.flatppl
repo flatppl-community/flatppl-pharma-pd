@@ -1,0 +1,23 @@
+%%%
+# Direct concentration-response relationships
+
+Emax is an increment above baseline. Imax is a fractional baseline reduction.
+Concentrations are nonnegative; half-effect concentrations and Hill exponents
+are positive. See docs/reference.md for units, boundaries and conventions.
+%%%
+flatppl_compat = "0.1"
+fractions = load_module("fractions.flatppl")
+
+_pd_emax(c, baseline, maximum, half) = baseline + maximum * c / (half + c)
+_pd_sigmoid_emax(c, baseline, maximum, half, hill) = baseline + maximum * fractions.hill_fraction(c, half, hill)
+_pd_inhibitory_emax(c, baseline, maximum, half) = baseline * (1 - maximum * c / (half + c))
+_pd_inhibitory_sigmoid_emax(c, baseline, maximum, half, hill) = baseline * (1 - maximum * fractions.hill_fraction(c, half, hill))
+
+% Baseline plus saturating maximum increment; fields baseline, emax, ec50.
+emax(concentration, p) = _pd_emax.(concentration, p.baseline, p.emax, p.ec50)
+% Hill response; fields baseline, emax, ec50, hill.
+sigmoid_emax(concentration, p) = _pd_sigmoid_emax.(concentration, p.baseline, p.emax, p.ec50, p.hill)
+% Fractional baseline inhibition; fields baseline, imax, ic50.
+inhibitory_emax(concentration, p) = _pd_inhibitory_emax.(concentration, p.baseline, p.imax, p.ic50)
+% Hill baseline inhibition; fields baseline, imax, ic50, hill.
+inhibitory_sigmoid_emax(concentration, p) = _pd_inhibitory_sigmoid_emax.(concentration, p.baseline, p.imax, p.ic50, p.hill)

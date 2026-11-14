@@ -1,0 +1,15 @@
+%%%
+# Zero-concentration parameter derivative fixture
+
+Input coordinates are log baseline, Emax, half-effect concentration and Hill
+exponent. Outputs are the four direct responses at zero, all equal to baseline.
+The concentration is fixed: no claim about concentration derivatives is made.
+%%%
+flatppl_compat = "0.1"
+pd = load_module("../main.flatppl")
+x = elementof(cartpow(reals, 4))
+p = exp.(x)
+direct = record(baseline = p[1], emax = p[2], ec50 = p[3], hill = p[4])
+inhibitory = record(baseline = p[1], imax = 0.8, ic50 = p[3], hill = p[4])
+inputs = x
+outputs = [pd.emax(0.0, direct), pd.sigmoid_emax(0.0, direct), pd.inhibitory_emax(0.0, inhibitory), pd.inhibitory_sigmoid_emax(0.0, inhibitory)]
