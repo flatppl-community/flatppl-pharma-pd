@@ -1,0 +1,19 @@
+%%%
+# Pharmacodynamics
+
+Direct concentration-response curves and delayed response dynamics.
+%%%
+flatppl_compat = "0.1"
+responses = load_module("src/responses.flatppl")
+dynamics = load_module("src/dynamics.flatppl")
+emax = responses.emax
+sigmoid_emax = responses.sigmoid_emax
+inhibitory_emax = responses.inhibitory_emax
+inhibitory_sigmoid_emax = responses.inhibitory_sigmoid_emax
+effect_site_rhs = dynamics.effect_site_rhs
+indirect_inhibition_input_rhs = dynamics.indirect_inhibition_input_rhs
+indirect_inhibition_loss_rhs = dynamics.indirect_inhibition_loss_rhs
+indirect_stimulation_input_rhs = dynamics.indirect_stimulation_input_rhs
+indirect_stimulation_loss_rhs = dynamics.indirect_stimulation_loss_rhs
+effect_site = dynamics.effect_site
+indirect_response = dynamics.indirect_response

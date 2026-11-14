@@ -1,0 +1,17 @@
+%%%
+# Oral PK with an effect-site delay
+
+A known oral dose drives an effect compartment and a sigmoid response. Units
+are mg, L and hours; response units are arbitrary. Refine the grid to assess
+integration accuracy. The initial effect-site concentration is explicitly zero.
+%%%
+flatppl_compat = "0.1"
+pd = load_module("../main.flatppl")
+pk = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-pharma-pk/d92741153dabadf302237ed4d115ca1ba6520ea4/main.flatppl")
+ode = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-numerics-ode/728507a8b8f62914a5c184ff7d3d47560b3f902a/main.flatppl")
+concentration(t, p) = pk.one_compartment_oral(t, p.dose, p)
+pk_parameters = record(dose = 100.0, clearance = 1.2, volume = 8.0, absorption = 0.9, bioavailability = 0.8)
+effect_parameters = record(ke0 = 0.7, concentration_parameters = pk_parameters)
+times = linspace(0.0, 8.0, 81)
+site_concentration = pd.effect_site(ode.vern7, concentration, 0.0, times, effect_parameters)
+response = pd.sigmoid_emax(site_concentration, record(baseline = 2.0, emax = 3.0, ec50 = 1.0, hill = 1.5))

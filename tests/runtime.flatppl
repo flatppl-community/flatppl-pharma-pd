@@ -1,0 +1,31 @@
+%%%
+# Pharmacodynamic value and derivative fixture
+
+Eight log parameters: baseline, Emax, half-effect concentration, Hill exponent,
+ke0, kin, kout, constant concentration. Outputs group four direct curves,
+effect site, then the four indirect models.
+%%%
+flatppl_compat = "0.1"
+pd = load_module("../main.flatppl")
+ode = load_module("https://raw.githubusercontent.com/flatppl-community/flatppl-numerics-ode/728507a8b8f62914a5c184ff7d3d47560b3f902a/main.flatppl")
+x = elementof(cartpow(reals, 8))
+p = exp.(x)
+concentration(t, q) = q.value
+concentrations = [0.25, 1.0, 4.0]
+direct = record(baseline = p[1], emax = p[2], ec50 = p[3], hill = p[4])
+inhibitory = record(baseline = p[1], imax = 0.8, ic50 = p[3], hill = p[4])
+effect = record(ke0 = p[5], concentration_parameters = record(value = p[8]))
+indirect = record(kin = p[6], kout = p[7], imax = 0.8, ic50 = p[3], smax = 1.2, sc50 = p[3], hill = p[4], concentration_parameters = record(value = p[8]))
+times = [0.0, 0.1, 0.2, 0.3, 0.4]
+inputs = x
+outputs = cat(
+    pd.emax(concentrations, direct),
+    pd.sigmoid_emax(concentrations, direct),
+    pd.inhibitory_emax(concentrations, inhibitory),
+    pd.inhibitory_sigmoid_emax(concentrations, inhibitory),
+    pd.effect_site(ode.vern7, concentration, 0.2, times, effect),
+    pd.indirect_response(ode.vern7, pd.indirect_inhibition_input_rhs, concentration, p[6] / p[7], times, indirect),
+    pd.indirect_response(ode.vern7, pd.indirect_inhibition_loss_rhs, concentration, p[6] / p[7], times, indirect),
+    pd.indirect_response(ode.vern7, pd.indirect_stimulation_input_rhs, concentration, p[6] / p[7], times, indirect),
+    pd.indirect_response(ode.vern7, pd.indirect_stimulation_loss_rhs, concentration, p[6] / p[7], times, indirect)
+)

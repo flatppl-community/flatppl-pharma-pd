@@ -1,0 +1,20 @@
+%%%
+# A concentration-response experiment
+
+Infer a maximum response increment and half-effect concentration from six
+synthetic measurements. Baseline and measurement noise are known. Proper priors
+keep the experiment explicit; the library supplies only the response curve.
+%%%
+flatppl_compat = "0.1"
+pd = load_module("../main.flatppl")
+concentration_data = [0.0, 0.25, 0.5, 1.0, 2.0, 4.0]
+y_data = [2.03, 2.36, 2.71, 3.01, 3.36, 3.58]
+emax ~ LogNormal(log(2.0), 0.4)
+ec50 ~ LogNormal(log(1.0), 0.5)
+parameters = record(baseline = 2.0, emax = emax, ec50 = ec50)
+means = pd.emax(concentration_data, parameters)
+response ~ Normal.(means, 0.08)
+prior = lawof(record(emax = emax, ec50 = ec50))
+forward = kernelof(response, emax = emax, ec50 = ec50)
+L = likelihoodof(forward, y_data)
+Pi_post = bayesupdate(L, prior)

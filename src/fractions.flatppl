@@ -1,0 +1,10 @@
+%%%
+# Shared Hill fraction
+
+Internal module shared by direct responses and turnover dynamics.
+%%%
+flatppl_compat = "0.1"
+
+# Protect the logarithm even when ifelse evaluates both branches. The logistic
+# form avoids forming large concentration powers or concentration ratios.
+hill_fraction(c, half, hill) = ifelse(c > 0, invlogit(hill * (log(ifelse(c > 0, c, half)) - log(half))), 0)

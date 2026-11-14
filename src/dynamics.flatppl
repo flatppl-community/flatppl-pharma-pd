@@ -1,0 +1,30 @@
+%%%
+# Effect-site and indirect response dynamics
+
+The concentration callback takes (time, concentration_parameters). All fitted
+parameters are passed explicitly; callbacks must not capture stochastic values.
+%%%
+flatppl_compat = "0.1"
+fractions = load_module("fractions.flatppl")
+
+% Derivative of [effect_site_concentration]; p.ke0 has units inverse time.
+effect_site_rhs(concentration, t, y, p) = [p.ke0 * (concentration(t, p.concentration_parameters) - y[1])]
+
+_pd_inhibition(concentration, t, p) = 1 - p.imax * fractions.hill_fraction(concentration(t, p.concentration_parameters), p.ic50, p.hill)
+_pd_stimulation(concentration, t, p) = 1 + p.smax * fractions.hill_fraction(concentration(t, p.concentration_parameters), p.sc50, p.hill)
+
+% Model I: inhibit production; y is [response].
+indirect_inhibition_input_rhs(concentration, t, y, p) = [p.kin * _pd_inhibition(concentration, t, p) - p.kout * y[1]]
+% Model II: inhibit loss; inhibition raises the eventual response.
+indirect_inhibition_loss_rhs(concentration, t, y, p) = [p.kin - p.kout * _pd_inhibition(concentration, t, p) * y[1]]
+% Model III: stimulate production; y is [response].
+indirect_stimulation_input_rhs(concentration, t, y, p) = [p.kin * _pd_stimulation(concentration, t, p) - p.kout * y[1]]
+% Model IV: stimulate loss; stimulation lowers the eventual response.
+indirect_stimulation_loss_rhs(concentration, t, y, p) = [p.kin - p.kout * _pd_stimulation(concentration, t, p) * y[1]]
+
+_pd_effect_rhs(t, y, args) = effect_site_rhs(args[1], t, y, args[2])
+_pd_indirect_rhs(t, y, args) = args[1](args[2], t, y, args[3])
+% Solve the effect-site concentration on the caller's grid, including initial.
+effect_site(solver, concentration, initial, times, p) = rowstack(solver(_pd_effect_rhs, [initial], times, (concentration, p)))[:, 1]
+% Solve one indirect response model on the caller's grid, including initial.
+indirect_response(solver, rhs, concentration, initial, times, p) = rowstack(solver(_pd_indirect_rhs, [initial], times, (rhs, concentration, p)))[:, 1]
