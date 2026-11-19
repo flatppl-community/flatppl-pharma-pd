@@ -11,8 +11,6 @@ p = record(baseline = 2.0, emax = 3.0, ec50 = 1.0, hill = 1.5)
 response = pd.sigmoid_emax([0.0, 0.25, 1.0, 4.0], p)
 ```
 
-The library provides Emax and Hill curves, fractional inhibition, an effect compartment, and four production/loss turnover models. Parameters, concentration functions, initial conditions, priors, and solver grids are explicit.
+The Hill curve is $E(C)=E_0+E_{\max}C^h/(K^h+C^h)$. Scalar or vector concentrations give responses of the same shape; parameters are scalar. Concentrations are nonnegative, and $K,h>0$. Delayed responses use a one-component ODE state with an explicit concentration callback and time grid.
 
 The [concentration-response example](examples/playground.flatppl) infers a maximum increment and half-effect concentration. The [effect-site example](examples/effect-site.flatppl) couples oral pharmacokinetics to a delayed response.
-
-See the reference for definitions, domains, numerical limits, and validation commands.
