@@ -46,7 +46,7 @@ The zero and infinite-concentration limits remain baseline and baseline plus
 maximum increment.
 
 For positive concentration, the Hill fraction is evaluated as
-$\{1+\exp[-h(\log C-\log K)]\}^{-1}$ to avoid large powers. Zero is handled
+$`\{1+\exp[-h(\log C-\log K)]\}^{-1}`$ to avoid large powers. Zero is handled
 explicitly with a protected logarithm, retaining finite parameter derivatives.
 The concentration-derivative contract is for $C>0$: at zero its right-hand
 limit is infinite for $0<h<1$, $1/K$ for $h=1$, and zero for $h>1$.
@@ -101,7 +101,7 @@ $$\dot C_e=k_{e0}[C(t)-C_e].$$
 `ke0` is finite and positive, with units $1/\mathrm{time}$. $C_e$ uses the same
 concentration units as $C$. The compartment has no mass balance feedback to PK.
 Use $C_e$ as the concentration input to a direct response curve.
-At constant $C_*$, $C_e(t)=C_*+[C_e(t_0)-C_*]e^{-k_{e0}(t-t_0)}$.
+At constant $`C_*`$, $`C_e(t)=C_*+[C_e(t_0)-C_*]e^{-k_{e0}(t-t_0)}`$.
 
 ## Indirect response parameters
 
