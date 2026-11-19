@@ -2,6 +2,10 @@
 # Pharmacodynamics
 
 Direct concentration-response curves and delayed response dynamics.
+Direct curves preserve the scalar or vector concentration shape; parameters
+are scalar record fields. Dynamic RHS functions return a one-component vector;
+solve helpers return one scalar per time. See docs/reference.md for equations
+and parameter domains.
 %%%
 flatppl_compat = "0.1"
 responses = load_module("src/responses.flatppl")
